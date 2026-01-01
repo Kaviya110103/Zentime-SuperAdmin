@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SuperAdmin Dashboard | Client Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-light: #ede9fe;
+      --primary-dark: #5b21b6;
+      --secondary: #a78bfa;
+      --success: #10b981;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --gray: #64748b;
+      --white: #ffffff;
+      --sidebar-width: 260px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+      --border-radius: 0.75rem;
+    }
+   
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f5f7fb;
+      color: #4a5568;
+      overflow-x: hidden;
+    }
+   
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+      box-shadow: var(--shadow-md);
+      z-index: 100;
+      transition: var(--transition);
+      overflow-y: auto;
+    }
+   
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+   
+    .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+    }
+   
+    .logo img {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      margin-right: 12px;
+      border-radius: 4px;
+    }
+   
+    .logo i {
+      display: none;
+    }
+   
+    .sidebar-menu {
+      padding: 1rem 0;
+      list-style: none;
+    }
+   
+    .sidebar-menu li a {
+      display: flex;
+      align-items: center;
+      padding: 0.875rem 1.5rem;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+   
+    .sidebar-menu li a:hover {
+      color: var(--white);
+      background: rgba(255,255,255,0.1);
+    }
+   
+    .sidebar-menu li a i {
+      width: 24px;
+      margin-right: 0.75rem;
+      text-align: center;
+      font-size: 1.125rem;
+    }
+   
+    .sidebar-menu li.active a {
+      color: var(--white);
+      background: rgba(255,255,255,0.15);
+      border-left: 4px solid var(--white);
+    }
+   
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 2rem;
+      transition: var(--transition);
+      min-height: 100vh;
+    }
+   
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+   
+    .page-title {
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0;
+      font-size: 1.75rem;
+    }
+   
+    .breadcrumb {
+      background: transparent;
+      padding: 0;
+      margin: 0.5rem 0 0 0;
+    }
+   
+    .breadcrumb-item a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+   
+    /* Cards */
+    .card {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      background: var(--white);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+   
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+   
+    .card-header {
+      background: var(--white);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+   
+    .card-title {
+      font-weight: 600;
+      margin: 0;
+      color: var(--dark);
+    }
+   
+    /* Buttons */
+    .btn {
+      border-radius: 0.5rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+    }
+   
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+   
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+   
+    .btn-outline-primary {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+   
+    .btn-outline-primary:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+   
+    /* Tables */
+    .table {
+      color: #4a5568;
+      margin: 0;
+    }
+   
+    .table th {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 600;
+      padding: 1rem;
+      border-top: none;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+   
+    .table td {
+      padding: 1rem;
+      vertical-align: middle;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+   
+    /* Badges */
+    .badge {
+      font-weight: 500;
+      padding: 0.35em 0.65em;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+    }
+   
+    .badge-success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+   
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+   
+    /* Forms */
+    .form-control {
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      transition: var(--transition);
+    }
+   
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.1);
+    }
+   
+    /* User Profile */
+    .user-profile {
+      display: flex;
+      align-items: center;
+    }
+   
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      object-fit: cover;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 600;
+    }
+   
+    /* Search */
+    .search-box {
+      position: relative;
+    }
+   
+    .search-box input {
+      padding-left: 2.5rem;
+      border-radius: 0.5rem;
+    }
+   
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+   
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1100;
+    }
+   
+    .toast {
+      border-radius: 0.5rem;
+      border: none;
+      box-shadow: var(--shadow-md);
+    }
+   
+    /* Stats Cards */
+    .stats-card {
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      height: 100%;
+      text-align: center;
+      cursor: pointer;
+    }
+    
+    .stats-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .stats-card .card-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.75rem;
+    }
+    
+    .stats-card .card-icon.clients {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary);
+    }
+    
+    .stats-card .card-icon.employees {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+    
+    .stats-card .card-icon.add {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--info);
+    }
+    
+    .stats-card .card-icon.view {
+      background: rgba(249, 115, 22, 0.1);
+      color: #f97316;
+    }
+    
+    .stats-card h3 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--dark);
+    }
+    
+    .stats-card p {
+      color: var(--gray);
+      margin: 0;
+      font-size: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+      }
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .page-header > div:last-child {
+        margin-top: 1rem;
+        width: 100%;
+      }
+      .search-box {
+        flex: 1;
+      }
+      .search-box input {
+        width: 100% !important;
+      }
+    }
+   
+    /* Mobile Menu Toggle */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 101;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+    }
+   
+    @media (max-width: 992px) {
+      .mobile-toggle {
+        display: flex;
+      }
+    }
+   
+    /* Overlay for mobile sidebar */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+   
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+   
+    .fade-in {
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    /* Action buttons in table */
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    /* Custom modal styles */
+    .modal-header {
+      background: var(--primary-light);
+      border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+    }
+    
+    .modal-title {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    
+    /* Empty state */
+    .empty-state {
+      padding: 3rem 1rem;
+      text-align: center;
+      color: var(--gray);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-light);
+    }
+    
+    /* Section visibility */
+    .section {
+      display: none;
+    }
+    
+    .section.active {
+      display: block;
+    }
+    
+    /* Form improvements */
+    .input-group-text {
+      background-color: var(--primary-light);
+      border-color: rgba(0,0,0,0.1);
+    }
+    
+    /* Working hours alignment fix */
+    .d-flex.gap-2.align-items-center {
+      align-items: center;
+    }
+    
+    .d-flex.gap-2.align-items-center .form-control {
+      flex: 1;
+    }
+    
+    /* Modal improvements */
+    .modal-content {
+      border-radius: var(--border-radius);
+    }
+    
+    .modal-body {
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    
+    /* Responsive form adjustments */
+    @media (max-width: 768px) {
+      .modal-body {
+        padding: 1rem;
+      }
+      
+      .d-flex.gap-2.align-items-center {
+        flex-direction: column;
+        gap: 0.5rem !important;
+      }
+      
+      .d-flex.gap-2.align-items-center span {
+        margin: 0.5rem 0;
+      }
+    }
+    
+    /* Logo styling */
+    .logo-placeholder {
+      height: 40px;
+      width: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+  
+  <!-- Sidebar Overlay for Mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src=".\images\logo.png" alt="logo"> 
+        <span>Admin Pro</span>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="#" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+      <li><a href="#" id="addClientLink" data-bs-toggle="modal" data-bs-target="#addClientModal"><i class="fas fa-user-plus"></i> Add Client</a></li>
+      <li class="active"><a href="#" id="clientsLink"><i class="fas fa-users"></i> View Clients</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="container-fluid">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title" id="pageTitle">Client Management</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" id="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+              <li class="breadcrumb-item active">Clients</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="d-flex gap-2 align-items-center" id="headerActions">
+          <div class="search-box" id="searchBox">
+            <i class="fas fa-search"></i>
+            <input id="searchInput" type="text" class="form-control" placeholder="Search clients...">
+          </div>
+          <button class="btn btn-primary" id="addClientBtn" data-bs-toggle="modal" data-bs-target="#addClientModal">
+            <i class="fas fa-plus me-2"></i>Add Client
+          </button>
+        </div>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div class="section" id="dashboardSection">
+        <!-- Stats Cards -->
+        <div class="row fade-in mb-4" id="statsCards">
+          <div class="col-xl-3 col-md-6 mb-4">
+            <a href="#" id="totalClientsCard" style="text-decoration: none;">
+              <div class="stats-card">
+                <div class="card-icon clients">
+                  <i class="fas fa-users"></i>
+                </div>
+                <h3 id="totalClientsStat">0</h3>
+                <p>Total Clients</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stats-card">
+              <div class="card-icon employees">
+                <i class="fas fa-user-friends"></i>
+              </div>
+              <h3 id="totalEmployeesStat">0</h3>
+              <p>Total Employees</p>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6 mb-4">
+            <a href="#" id="addClientDashboardBtn" data-bs-toggle="modal" data-bs-target="#addClientModal" style="text-decoration: none;">
+              <div class="stats-card">
+                <div class="card-icon add">
+                  <i class="fas fa-user-plus"></i>
+                </div>
+                <h3><i class="fas fa-plus"></i></h3>
+                <p>Add Client</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-md-6 mb-4">
+            <a href="#" id="viewClientsDashboardBtn" style="text-decoration: none;">
+              <div class="stats-card">
+                <div class="card-icon view">
+                  <i class="fas fa-eye"></i>
+                </div>
+                <h3><i class="fas fa-arrow-right"></i></h3>
+                <p>View Clients</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clients Section -->
+      <div class="section active" id="clientsSection">
+        <!-- Clients Table -->
+        <div class="card fade-in">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Client Directory</h5>
+            <div class="text-muted small">Total: <span id="clientCount">0</span> clients</div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover" id="clientsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Client</th>
+                    <th>Company</th>
+                    <th>Contact</th>
+                    <th>Registered</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div id="noClients" class="empty-state" style="display:none;">
+              <i class="fas fa-users-slash"></i>
+              <h5 class="text-muted">No clients found</h5>
+              <p class="text-muted">Add your first client to get started</p>
+              <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addClientModal">
+                <i class="fas fa-plus me-2"></i>Add Client
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Client Modal -->
+  <div class="modal fade" id="addClientModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="clientForm">
+            <div class="row mb-3">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Client Name <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  <input type="text" class="form-control" id="clientName" required value="Alice Johnson">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Client Code <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                  <input type="text" class="form-control" id="companyCode" required value="iie">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Company <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-building"></i></span>
+                  <input type="text" class="form-control" id="companyName" required value="Acme Corp">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Mobile <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                  <input type="tel" class="form-control" id="mobileNo" required value="9876543210">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                  <input type="email" class="form-control" id="email" required value="alice@example.com">
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label">Address <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                  <textarea class="form-control" id="address" rows="2" required>123 Main Street, Bangalore, India</textarea>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Employees <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-users"></i></span>
+                  <input type="number" min="1" class="form-control" id="employeeCount" required value="42">
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Registered <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                  <input type="date" class="form-control" id="registeredDate" required value="2025-08-01">
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Working Hours <span class="text-danger">*</span></label>
+                <div class="d-flex gap-2 align-items-center">
+                  <div class="flex-grow-1">
+                    <input type="time" class="form-control" id="workingFrom" required value="09:00">
+                  </div>
+                  <span class="text-muted">to</span>
+                  <div class="flex-grow-1">
+                    <input type="time" class="form-control" id="workingTo" required value="18:00">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Username <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                  <input type="text" class="form-control" id="username" required value="acme_admin">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Password <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                  <input type="text" class="form-control" id="password" required value="securePass123">
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label">Profile Photo</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-camera"></i></span>
+                  <input class="form-control" type="file" id="clientPhoto">
+                </div>
+              </div>
+            </div>
+            <div id="formAlert" class="alert d-none" role="alert"></div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button id="saveClientBtn" type="button" class="btn btn-primary">
+            <i class="fas fa-save me-2"></i>Save Client
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-danger">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+          <h5>Are you sure you want to delete this client?</h5>
+          <p class="text-muted">This action cannot be undone. All client data will be permanently removed.</p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Client</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    const baseUrl = "https://indra.zentime.co.in";
+    let clientsCache = [];
+    let clientToDelete = null;
+
+    // Initialize mobile sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileToggle = document.getElementById('mobileToggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      mobileToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.style.display = 'block';
+      });
+      
+      sidebarOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('active');
+        sidebarOverlay.style.display = 'none';
+      });
+      
+      // Close sidebar when clicking a link on mobile
+      const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 992) {
+            sidebar.classList.remove('active');
+            sidebarOverlay.style.display = 'none';
+          }
+        });
+      });
+      
+      // Navigation between sections
+      document.getElementById('dashboardLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection('dashboard');
+        updateActiveNav(this);
+      });
+      
+      document.getElementById('clientsLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection('clients');
+        updateActiveNav(this);
+      });
+      
+      // Add Client link in sidebar
+      document.getElementById('addClientLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        updateActiveNav(this);
+        // Modal will be opened by data-bs-toggle attribute
+      });
+      
+      // Dashboard buttons - FIXED: Make Total Clients card clickable
+      document.getElementById('totalClientsCard').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection('clients');
+        updateActiveNav(document.getElementById('clientsLink'));
+      });
+      
+      document.getElementById('addClientDashboardBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        updateActiveNav(document.getElementById('addClientLink'));
+      });
+      
+      document.getElementById('viewClientsDashboardBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection('clients');
+        updateActiveNav(document.getElementById('clientsLink'));
+      });
+      
+      // Start with clients section active by default
+      showSection('clients');
+      
+      // Load initial data
+      fetchClients();
+      
+      // Auto-hide sidebar on mobile when clicking outside
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 992 && 
+            !sidebar.contains(e.target) && 
+            e.target !== mobileToggle && 
+            !mobileToggle.contains(e.target)) {
+          sidebar.classList.remove('active');
+          sidebarOverlay.style.display = 'none';
+        }
+      });
+    });
+    
+    function showSection(section) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      
+      // Show the selected section
+      if (section === 'dashboard') {
+        document.getElementById('dashboardSection').classList.add('active');
+        document.getElementById('pageTitle').textContent = 'Dashboard';
+        document.getElementById('breadcrumb').innerHTML = '<li class="breadcrumb-item active">Dashboard</li>';
+        document.getElementById('searchBox').style.display = 'none';
+        document.getElementById('addClientBtn').style.display = 'none';
+      } else if (section === 'clients') {
+        document.getElementById('clientsSection').classList.add('active');
+        document.getElementById('pageTitle').textContent = 'Client Management';
+        document.getElementById('breadcrumb').innerHTML = '<li class="breadcrumb-item"><a href="#">Dashboard</a></li><li class="breadcrumb-item active">Clients</li>';
+        document.getElementById('searchBox').style.display = 'block';
+        document.getElementById('addClientBtn').style.display = 'block';
+      }
+    }
+    
+    function updateActiveNav(clickedLink) {
+      const navItems = document.querySelectorAll('.sidebar-menu li');
+      navItems.forEach(item => item.classList.remove('active'));
+      clickedLink.parentElement.classList.add('active');
+    }
+
+    function showToast(message, isError = false) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `
+        <div class="toast align-items-center text-white ${isError ? 'bg-danger' : 'bg-primary'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body d-flex align-items-center">
+              <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'} me-2"></i>
+              ${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>`;
+      const toastEl = wrapper.firstElementChild;
+      document.getElementById('toastContainer').appendChild(toastEl);
+      const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+      toast.show();
+      toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+    }
+
+    async function fetchClients(filter = '') {
+      try {
+        const res = await fetch(`${baseUrl}/api/clients`, {
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const data = await res.json();
+        clientsCache = data;
+        renderClients(data, filter);
+        updateStats(data);
+        document.getElementById('clientCount').textContent = data.length;
+      } catch (e) {
+        console.error(e);
+        showToast('Failed to load clients', true);
+        document.getElementById('noClients').style.display = 'block';
+      }
+    }
+    
+    function updateStats(clients) {
+      const totalClients = clients.length;
+      const totalEmployees = clients.reduce((sum, c) => sum + (parseInt(c.employeeCount) || 0), 0);
+      
+      document.getElementById('totalClientsStat').textContent = totalClients;
+      document.getElementById('totalEmployeesStat').textContent = totalEmployees;
+    }
+
+    function renderClients(list, filter = '') {
+      const tbody = document.querySelector('#clientsTable tbody');
+      tbody.innerHTML = '';
+     
+      const filtered = list.filter(c => {
+        if (!filter) return true;
+        const term = filter.toLowerCase();
+        return (c.clientName || '').toLowerCase().includes(term)
+          || (c.companyName || '').toLowerCase().includes(term)
+          || (c.emailAddress || '').toLowerCase().includes(term)
+          || (c.username || '').toLowerCase().includes(term)
+          || (c.companyCode || '').toLowerCase().includes(term);
+      });
+     
+      if (filtered.length === 0) {
+        document.getElementById('noClients').style.display = 'block';
+        document.getElementById('clientCount').textContent = '0';
+      } else {
+        document.getElementById('noClients').style.display = 'none';
+        document.getElementById('clientCount').textContent = filtered.length;
+      }
+     
+      filtered.forEach((c, i) => {
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.onclick = () => viewClient(c.id);
+       
+        // Get initials for avatar
+        const initials = c.clientName ? c.clientName.split(' ').map(n => n[0]).join('').substring(0, 2) : 'C';
+       
+        tr.innerHTML = `
+          <td class="text-muted">${i + 1}</td>
+          <td>
+            <div class="user-profile">
+              <div class="user-avatar">${initials}</div>
+              <div>
+                <div class="fw-semibold">${c.clientName || 'N/A'}</div>
+                <small class="text-muted">${c.username || ''}</small>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div>${c.companyName || 'N/A'}</div>
+            <small class="text-muted">${c.companyCode || ''}</small>
+          </td>
+          <td>
+            <div>${c.emailAddress || 'N/A'}</div>
+            <small class="text-muted">${c.mobileNumber || ''}</small>
+          </td>
+          <td>
+            <div>${c.registeredDate || 'N/A'}</div>
+            <small class="text-muted">${c.employeeCount || '0'} employees</small>
+          </td>
+          <td>
+            ${c.employeeCount && parseInt(c.employeeCount) > 0
+              ? '<span class="badge badge-success"><i class="fas fa-check-circle me-1"></i> Active</span>'
+              : '<span class="badge badge-danger"><i class="fas fa-times-circle me-1"></i> Inactive</span>'}
+          </td>
+          <td>
+            <div class="action-btns">
+              <button class="btn btn-sm btn-outline-primary" data-id="${c.id}" onclick="event.stopPropagation();editClient(${c.id})">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" data-id="${c.id}" onclick="event.stopPropagation();showDeleteConfirm(${c.id})">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    
+    function showDeleteConfirm(id) {
+      clientToDelete = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+      modal.show();
+    }
+    
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+      if (!clientToDelete) return;
+      
+      await deleteClient(clientToDelete);
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal'));
+      modal.hide();
+      clientToDelete = null;
+    });
+
+    async function deleteClient(id) {
+      try {
+        const resp = await fetch(`${baseUrl}/api/clients/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (resp.ok) {
+          showToast('Client deleted successfully');
+          fetchClients();
+        } else {
+          let errorMsg = `Delete failed: ${resp.status}`;
+          try {
+            const errorData = await resp.json();
+            errorMsg = errorData.message || errorMsg;
+          } catch (e) {}
+          showToast(errorMsg, true);
+        }
+      } catch (e) {
+        showToast('Delete error: ' + e.message, true);
+        console.error('Delete error:', e);
+      }
+    }
+
+    async function createClient(payload) {
+      try {
+        const resp = await fetch(`${baseUrl}/api/clients`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        const body = await resp.json();
+        if (resp.ok) {
+          showToast('Client created successfully');
+          fetchClients();
+          return body;
+        } else {
+          showToast('Create failed: ' + (body?.message || resp.status), true);
+          return null;
+        }
+      } catch (e) {
+        showToast('Create error: ' + e.message, true);
+        console.error(e);
+        return null;
+      }
+    }
+
+    function viewClient(id) {
+      const c = clientsCache.find(c => c.id === id);
+      if (!c) return;
+     
+      // Create a modal to show client details
+      const modal = new bootstrap.Modal(document.createElement('div'));
+      modal._element.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Client Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-center mb-4">
+                <div class="user-avatar mx-auto" style="width:80px;height:80px;font-size:2rem;">
+                  ${c.clientName ? c.clientName.split(' ').map(n => n[0]).join('') : 'C'}
+                </div>
+                <h4 class="mt-3 mb-1">${c.clientName || 'N/A'}</h4>
+                <div class="text-muted">${c.companyName || ''}</div>
+              </div>
+             
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="mb-2">
+                    <small class="text-muted">Username</small>
+                    <div>${c.username || 'N/A'}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-2">
+                    <small class="text-muted">Status</small>
+                    <div>
+                      ${c.employeeCount && parseInt(c.employeeCount) > 0
+                        ? '<span class="badge badge-success">Active</span>'
+                        : '<span class="badge badge-danger">Inactive</span>'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="mb-2">
+                    <small class="text-muted">Email</small>
+                    <div>${c.emailAddress || 'N/A'}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-2">
+                    <small class="text-muted">Mobile</small>
+                    <div>${c.mobileNumber || 'N/A'}</div>
+                  </div>
+                </div>
+              </div>
+             
+              <div class="mb-2">
+                <small class="text-muted">Address</small>
+                <div>${c.address || 'N/A'}</div>
+              </div>
+             
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-2">
+                    <small class="text-muted">Employees</small>
+                    <div>${c.employeeCount || '0'}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-2">
+                    <small class="text-muted">Registered</small>
+                    <div>${c.registeredDate || 'N/A'}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-2">
+                <small class="text-muted">Company Code</small>
+                <div>${c.companyCode || 'N/A'}</div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal._element);
+      modal.show();
+     
+      // Clean up after modal is hidden
+      modal._element.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modal._element);
+      });
+    }
+
+    function editClient(id) {
+      const c = clientsCache.find(c => c.id === id);
+      if (!c) return;
+     
+      // Populate modal for editing
+      document.getElementById('clientName').value = c.clientName;
+      document.getElementById('companyName').value = c.companyName;
+      document.getElementById('companyCode').value = c.companyCode;
+      document.getElementById('mobileNo').value = c.mobileNumber;
+      document.getElementById('email').value = c.emailAddress;
+      document.getElementById('address').value = c.address;
+      document.getElementById('employeeCount').value = c.employeeCount;
+      document.getElementById('registeredDate').value = c.registeredDate;
+      document.getElementById('username').value = c.username;
+     
+      // Set working hours if available
+      if (c.workingHours) {
+        const [from, to] = c.workingHours.split('-');
+        document.getElementById('workingFrom').value = from;
+        document.getElementById('workingTo').value = to;
+      }
+     
+      // Change modal title and save button text
+      document.querySelector('#addClientModal .modal-title').textContent = 'Edit Client';
+      document.getElementById('saveClientBtn').innerHTML = '<i class="fas fa-save me-2"></i>Update Client';
+     
+      // Store the ID for update
+      document.getElementById('saveClientBtn').dataset.id = id;
+     
+      const modal = new bootstrap.Modal(document.getElementById('addClientModal'));
+      modal.show();
+    }
+
+    document.getElementById('saveClientBtn').addEventListener('click', async () => {
+      const clientName = document.getElementById('clientName').value.trim();
+      const companyName = document.getElementById('companyName').value.trim();
+      const companyCode = document.getElementById('companyCode').value.trim();
+      const mobileNumber = document.getElementById('mobileNo').value.trim();
+      const emailAddress = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const employeeCount = parseInt(document.getElementById('employeeCount').value, 10);
+      const registeredDate = document.getElementById('registeredDate').value;
+      const workingFrom = document.getElementById('workingFrom').value;
+      const workingTo = document.getElementById('workingTo').value;
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const clientId = document.getElementById('saveClientBtn').dataset.id;
+
+      if (!clientName || !companyName || !mobileNumber || !emailAddress || !address || !employeeCount || !registeredDate || !username || !password) {
+        showToast('Please fill all required fields', true);
+        return;
+      }
+
+      const workingHours = `${workingFrom}-${workingTo}`;
+      const payload = {
+        clientName,
+        companyName,
+        companyCode,
+        mobileNumber,
+        emailAddress,
+        address,
+        employeeCount,
+        registeredDate,
+        workingHours,
+        username,
+        password
+      };
+
+      if (clientId) {
+        // Update existing client
+        try {
+          const resp = await fetch(`${baseUrl}/api/clients/${clientId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+         
+          if (resp.ok) {
+            showToast('Client updated successfully');
+            fetchClients();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addClientModal'));
+            modal.hide();
+          } else {
+            showToast('Update failed: ' + resp.status, true);
+          }
+        } catch (e) {
+          showToast('Update error: ' + e.message, true);
+        }
+      } else {
+        // Create new client
+        await createClient(payload);
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addClientModal'));
+        modal.hide();
+      }
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      renderClients(clientsCache, e.target.value);
+    });
+
+    // Reset modal when hidden
+    document.getElementById('addClientModal').addEventListener('hidden.bs.modal', () => {
+      document.getElementById('clientForm').reset();
+      document.querySelector('#addClientModal .modal-title').textContent = 'Add New Client';
+      document.getElementById('saveClientBtn').innerHTML = '<i class="fas fa-save me-2"></i>Save Client';
+      delete document.getElementById('saveClientBtn').dataset.id;
+    });
+  </script>
+</body>
+</html>

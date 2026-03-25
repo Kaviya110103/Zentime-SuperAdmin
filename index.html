@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/logo.png" type="image/png">
   <style>
     :root {
       --primary: #7c3aed;
@@ -218,6 +219,21 @@
       border-top: 1px solid rgba(0,0,0,0.05);
     }
    
+    /* Table row improvements */
+    .table tbody tr {
+      transition: var(--transition);
+      cursor: pointer;
+      user-select: none;
+    }
+   
+    .table tbody tr:hover {
+      background-color: rgba(124, 58, 237, 0.05) !important;
+    }
+   
+    .table tbody tr:active {
+      background-color: rgba(124, 58, 237, 0.1) !important;
+    }
+   
     /* Badges */
     .badge {
       font-weight: 500;
@@ -362,6 +378,23 @@
       font-size: 1rem;
     }
     
+    /* Action buttons in table */
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .action-btns .btn {
+      opacity: 0.8;
+      transition: var(--transition);
+    }
+    
+    .action-btns .btn:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+    
     /* Responsive */
     @media (max-width: 992px) {
       .sidebar {
@@ -437,13 +470,6 @@
       animation: fadeIn 0.3s ease forwards;
     }
     
-    /* Action buttons in table */
-    .action-btns {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    
     /* Custom modal styles */
     .modal-header {
       background: var(--primary-light);
@@ -500,6 +526,23 @@
     .modal-body {
       max-height: 70vh;
       overflow-y: auto;
+    }
+    
+    .form-compact .form-label {
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+    
+    .form-compact .mb-3 {
+      margin-bottom: 0.5rem !important;
+    }
+    
+    .form-compact .input-group-text {
+      padding: 0.4rem 0.6rem;
+    }
+    
+    .form-compact .form-control {
+      padding: 0.4rem 0.75rem;
     }
     
     /* Responsive form adjustments */
@@ -675,80 +718,122 @@
 
   <!-- Add Client Modal -->
   <div class="modal fade" id="addClientModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Add New Client</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="clientForm">
-            <div class="row mb-3">
+          <form id="clientForm" class="form-compact">
+            <div class="row g-2">
               <div class="col-md-6 mb-3">
                 <label class="form-label">Client Name <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-user"></i></span>
-                  <input type="text" class="form-control" id="clientName" required value="Alice Johnson">
+                  <input type="text" class="form-control" id="clientName" required placeholder="Enter client name">
                 </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">Client Code <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                  <input type="text" class="form-control" id="companyCode" required value="iie">
+                  <input type="text" class="form-control" id="companyCode" required placeholder="Enter client code">
                 </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">Company <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-building"></i></span>
-                  <input type="text" class="form-control" id="companyName" required value="Acme Corp">
+                  <input type="text" class="form-control" id="companyName" required placeholder="Enter company name">
                 </div>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label">Mobile <span class="text-danger">*</span></label>
+                <label class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                  <input type="tel" class="form-control" id="mobileNo" required placeholder="Enter mobile number">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Telephone No </label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                  <input type="tel" class="form-control" id="mobileNo" required value="9876543210">
+                  <input type="tel" class="form-control" id="telephoneNo" placeholder="Enter telephone number">
                 </div>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <label class="form-label">Email Id <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                  <input type="email" class="form-control" id="email" required value="alice@example.com">
+                  <input type="email" class="form-control" id="email" required placeholder="Enter email id">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Mailing Incharge Name <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                  <input type="text" class="form-control" id="mailingInchargeName" required placeholder="Enter mailing incharge name">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Mailing Incharge Email Id <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+                  <input type="email" class="form-control" id="mailingInchargeEmail" required placeholder="Enter mailing incharge email">
                 </div>
               </div>
               <div class="col-12 mb-3">
-                <label class="form-label">Address <span class="text-danger">*</span></label>
+                <label class="form-label">Address Line <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                  <textarea class="form-control" id="address" rows="2" required>123 Main Street, Bangalore, India</textarea>
+                  <textarea class="form-control" id="addressLine" rows="2" required placeholder="Enter address line"></textarea>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Pincode <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                  <input type="text" inputmode="numeric" class="form-control" id="pincode" required placeholder="Enter pincode" maxlength="6">
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">State <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-map"></i></span>
+                  <input type="text" class="form-control" id="state" required placeholder="Auto-filled from pincode" readonly>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Country <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                  <input type="text" class="form-control" id="country" required placeholder="Auto-filled from pincode" readonly>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label">Employees <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-users"></i></span>
-                  <input type="number" min="1" class="form-control" id="employeeCount" required value="42">
+                  <input type="number" min="1" class="form-control" id="employeeCount" required placeholder="Enter employee count">
                 </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label">Registered <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                  <input type="date" class="form-control" id="registeredDate" required value="2025-08-01">
+                  <input type="date" class="form-control" id="registeredDate" required placeholder="Select registered date">
                 </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label">Working Hours <span class="text-danger">*</span></label>
                 <div class="d-flex gap-2 align-items-center">
                   <div class="flex-grow-1">
-                    <input type="time" class="form-control" id="workingFrom" required value="09:00">
+                    <input type="time" class="form-control" id="workingFrom" required placeholder="From">
                   </div>
                   <span class="text-muted">to</span>
                   <div class="flex-grow-1">
-                    <input type="time" class="form-control" id="workingTo" required value="18:00">
+                    <input type="time" class="form-control" id="workingTo" required placeholder="To">
                   </div>
                 </div>
               </div>
@@ -756,21 +841,14 @@
                 <label class="form-label">Username <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-                  <input type="text" class="form-control" id="username" required value="acme_admin">
+                  <input type="text" class="form-control" id="username" required placeholder="Enter username">
                 </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">Password <span class="text-danger">*</span></label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                  <input type="text" class="form-control" id="password" required value="securePass123">
-                </div>
-              </div>
-              <div class="col-12 mb-3">
-                <label class="form-label">Profile Photo</label>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-camera"></i></span>
-                  <input class="form-control" type="file" id="clientPhoto">
+                  <input type="text" class="form-control" id="password" required placeholder="Enter password">
                 </div>
               </div>
             </div>
@@ -814,7 +892,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    const baseUrl = "https://indra.zentime.co.in";
+    const baseUrl = "https://iie.zentime.co.in";
     let clientsCache = [];
     let clientToDelete = null;
 
@@ -865,7 +943,7 @@
         // Modal will be opened by data-bs-toggle attribute
       });
       
-      // Dashboard buttons - FIXED: Make Total Clients card clickable
+      // Dashboard buttons
       document.getElementById('totalClientsCard').addEventListener('click', function(e) {
         e.preventDefault();
         showSection('clients');
@@ -888,6 +966,21 @@
       
       // Load initial data
       fetchClients();
+      
+      // Pincode lookup to auto-fill state/country
+      const pincodeInput = document.getElementById('pincode');
+      if (pincodeInput) {
+        const debouncedLookup = debounce(() => {
+          const pin = pincodeInput.value.trim();
+          fetchPincodeDetails(pin);
+        }, 600);
+        
+        pincodeInput.addEventListener('input', debouncedLookup);
+        pincodeInput.addEventListener('blur', () => {
+          const pin = pincodeInput.value.trim();
+          fetchPincodeDetails(pin);
+        });
+      }
       
       // Auto-hide sidebar on mobile when clicking outside
       document.addEventListener('click', function(e) {
@@ -947,6 +1040,75 @@
       toast.show();
       toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
     }
+    
+    function debounce(fn, wait) {
+      let timer = null;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), wait);
+      };
+    }
+    
+    let lastPincodeLookup = '';
+    async function fetchPincodeDetails(pincode) {
+      const stateEl = document.getElementById('state');
+      const countryEl = document.getElementById('country');
+      if (!stateEl || !countryEl) return;
+
+      const setEditable = (canEdit) => {
+        stateEl.readOnly = !canEdit;
+        countryEl.readOnly = !canEdit;
+        if (canEdit) {
+          stateEl.placeholder = 'Enter state';
+          countryEl.placeholder = 'Enter country';
+        } else {
+          stateEl.placeholder = 'Auto-filled from pincode';
+          countryEl.placeholder = 'Auto-filled from pincode';
+        }
+      };
+      
+      if (!pincode || pincode.length !== 6 || !/^\d{6}$/.test(pincode)) {
+        stateEl.value = '';
+        countryEl.value = '';
+        lastPincodeLookup = '';
+        setEditable(true);
+        return;
+      }
+      
+      if (pincode === lastPincodeLookup) return;
+      lastPincodeLookup = pincode;
+      
+      try {
+        setEditable(false);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        const resp = await fetch(`https://api.postalpincode.in/pincode/${pincode}`, {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        const data = await resp.json();
+        
+        if (!Array.isArray(data) || data.length === 0 || data[0].Status !== 'Success' || !data[0].PostOffice?.length) {
+          stateEl.value = '';
+          countryEl.value = '';
+          setEditable(true);
+          showToast('Pincode not found', true);
+          return;
+        }
+        
+        const po = data[0].PostOffice[0];
+        stateEl.value = po.State || '';
+        countryEl.value = po.Country || '';
+        if (!stateEl.value || !countryEl.value) {
+          setEditable(true);
+        }
+      } catch (e) {
+        stateEl.value = '';
+        countryEl.value = '';
+        setEditable(true);
+        showToast('Failed to fetch state/country from pincode', true);
+      }
+    }
 
     async function fetchClients(filter = '') {
       try {
@@ -984,8 +1146,14 @@
         return (c.clientName || '').toLowerCase().includes(term)
           || (c.companyName || '').toLowerCase().includes(term)
           || (c.emailAddress || '').toLowerCase().includes(term)
+          || (c.mailingInchargeName || '').toLowerCase().includes(term)
+          || (c.mailingInchargeEmail || '').toLowerCase().includes(term)
           || (c.username || '').toLowerCase().includes(term)
-          || (c.companyCode || '').toLowerCase().includes(term);
+          || (c.companyCode || '').toLowerCase().includes(term)
+          || (c.telephoneNumber || '').toLowerCase().includes(term)
+          || (c.pincode || '').toLowerCase().includes(term)
+          || (c.state || '').toLowerCase().includes(term)
+          || (c.country || '').toLowerCase().includes(term);
       });
      
       if (filtered.length === 0) {
@@ -998,8 +1166,14 @@
      
       filtered.forEach((c, i) => {
         const tr = document.createElement('tr');
-        tr.style.cursor = 'pointer';
-        tr.onclick = () => viewClient(c.id);
+        
+        // Add click handler for the entire row
+        tr.addEventListener('click', (e) => {
+          // Don't trigger if clicking on action buttons
+          if (!e.target.closest('.action-btns')) {
+            viewClient(c.id);
+          }
+        });
        
         // Get initials for avatar
         const initials = c.clientName ? c.clientName.split(' ').map(n => n[0]).join('').substring(0, 2) : 'C';
@@ -1034,16 +1208,129 @@
           </td>
           <td>
             <div class="action-btns">
-              <button class="btn btn-sm btn-outline-primary" data-id="${c.id}" onclick="event.stopPropagation();editClient(${c.id})">
+              <button class="btn btn-sm btn-outline-primary" data-id="${c.id}" onclick="editClient(${c.id})">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger" data-id="${c.id}" onclick="event.stopPropagation();showDeleteConfirm(${c.id})">
+              <button class="btn btn-sm btn-outline-danger" data-id="${c.id}" onclick="showDeleteConfirm(${c.id})">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>
           </td>
         `;
         tbody.appendChild(tr);
+      });
+    }
+    
+    function viewClient(id) {
+      const c = clientsCache.find(c => c.id === id);
+      if (!c) return;
+     
+      // Create a modal to show client details
+      const modalEl = document.createElement('div');
+      modalEl.className = 'modal fade';
+      modalEl.tabIndex = -1;
+      modalEl.innerHTML = `
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Client Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                  <div class="user-avatar mx-auto" style="width:100px;height:100px;font-size:2.5rem;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;">
+                    ${c.clientName ? c.clientName.split(' ').map(n => n[0]).join('') : 'C'}
+                  </div>
+                  <h4 class="mt-3 mb-1">${c.clientName || 'N/A'}</h4>
+                  <div class="text-muted">${c.companyName || ''}</div>
+                  <div class="mt-2">
+                    ${c.employeeCount && parseInt(c.employeeCount) > 0
+                      ? '<span class="badge badge-success p-2 mt-2"><i class="fas fa-check-circle me-1"></i> Active</span>'
+                      : '<span class="badge badge-danger p-2 mt-2"><i class="fas fa-times-circle me-1"></i> Inactive</span>'}
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-id-card me-2"></i>Client Code</h6>
+                          <p class="card-text fs-5">${c.companyCode || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-users me-2"></i>Employees</h6>
+                          <p class="card-text fs-5">${c.employeeCount || '0'}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-calendar me-2"></i>Registered Date</h6>
+                          <p class="card-text fs-5">${c.registeredDate || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-clock me-2"></i>Working Hours</h6>
+                          <p class="card-text fs-5">${c.workingHours || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+              <div class="row mt-4">
+                <div class="col-md-6 mb-3">
+                  <h6 class="text-muted mb-2"><i class="fas fa-envelope me-2"></i>Contact Information</h6>
+                  <ul class="list-unstyled">
+                    <li class="mb-1"><strong>Email:</strong> ${c.emailAddress || 'N/A'}</li>
+                    <li class="mb-1"><strong>Mobile:</strong> ${c.mobileNumber || 'N/A'}</li>
+                    <li class="mb-1"><strong>Telephone:</strong> ${c.telephoneNumber || 'N/A'}</li>
+                    <li class="mb-1"><strong>Username:</strong> ${c.username || 'N/A'}</li>
+                  </ul>
+                  <h6 class="text-muted mt-3 mb-2"><i class="fas fa-user-tie me-2"></i>Mailing Incharge</h6>
+                  <ul class="list-unstyled">
+                    <li class="mb-1"><strong>Name:</strong> ${c.mailingInchargeName || 'N/A'}</li>
+                    <li class="mb-1"><strong>Email:</strong> ${c.mailingInchargeEmail || 'N/A'}</li>
+                  </ul>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <h6 class="text-muted mb-2"><i class="fas fa-map-marker-alt me-2"></i>Address</h6>
+                  <p class="mb-1" style="white-space: pre-line;">${c.addressLine || c.address || 'N/A'}</p>
+                  <div class="small text-muted">
+                    <div><strong>Pincode:</strong> ${c.pincode || 'N/A'}</div>
+                    <div><strong>State:</strong> ${c.state || 'N/A'}</div>
+                    <div><strong>Country:</strong> ${c.country || 'N/A'}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="editClient(${c.id})" data-bs-dismiss="modal">
+                <i class="fas fa-edit me-2"></i>Edit Client
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modalEl);
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+     
+      // Clean up after modal is hidden
+      modalEl.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modalEl);
       });
     }
     
@@ -1115,102 +1402,6 @@
       }
     }
 
-    function viewClient(id) {
-      const c = clientsCache.find(c => c.id === id);
-      if (!c) return;
-     
-      // Create a modal to show client details
-      const modal = new bootstrap.Modal(document.createElement('div'));
-      modal._element.innerHTML = `
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Client Details</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="text-center mb-4">
-                <div class="user-avatar mx-auto" style="width:80px;height:80px;font-size:2rem;">
-                  ${c.clientName ? c.clientName.split(' ').map(n => n[0]).join('') : 'C'}
-                </div>
-                <h4 class="mt-3 mb-1">${c.clientName || 'N/A'}</h4>
-                <div class="text-muted">${c.companyName || ''}</div>
-              </div>
-             
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="mb-2">
-                    <small class="text-muted">Username</small>
-                    <div>${c.username || 'N/A'}</div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-2">
-                    <small class="text-muted">Status</small>
-                    <div>
-                      ${c.employeeCount && parseInt(c.employeeCount) > 0
-                        ? '<span class="badge badge-success">Active</span>'
-                        : '<span class="badge badge-danger">Inactive</span>'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-             
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="mb-2">
-                    <small class="text-muted">Email</small>
-                    <div>${c.emailAddress || 'N/A'}</div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-2">
-                    <small class="text-muted">Mobile</small>
-                    <div>${c.mobileNumber || 'N/A'}</div>
-                  </div>
-                </div>
-              </div>
-             
-              <div class="mb-2">
-                <small class="text-muted">Address</small>
-                <div>${c.address || 'N/A'}</div>
-              </div>
-             
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-2">
-                    <small class="text-muted">Employees</small>
-                    <div>${c.employeeCount || '0'}</div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-2">
-                    <small class="text-muted">Registered</small>
-                    <div>${c.registeredDate || 'N/A'}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="mb-2">
-                <small class="text-muted">Company Code</small>
-                <div>${c.companyCode || 'N/A'}</div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal._element);
-      modal.show();
-     
-      // Clean up after modal is hidden
-      modal._element.addEventListener('hidden.bs.modal', () => {
-        document.body.removeChild(modal._element);
-      });
-    }
-
     function editClient(id) {
       const c = clientsCache.find(c => c.id === id);
       if (!c) return;
@@ -1220,11 +1411,22 @@
       document.getElementById('companyName').value = c.companyName;
       document.getElementById('companyCode').value = c.companyCode;
       document.getElementById('mobileNo').value = c.mobileNumber;
+      document.getElementById('telephoneNo').value = c.telephoneNumber || '';
       document.getElementById('email').value = c.emailAddress;
-      document.getElementById('address').value = c.address;
+      document.getElementById('mailingInchargeName').value = c.mailingInchargeName || '';
+      document.getElementById('mailingInchargeEmail').value = c.mailingInchargeEmail || '';
+      document.getElementById('addressLine').value = c.addressLine || c.address || '';
+      document.getElementById('pincode').value = c.pincode || '';
+      document.getElementById('state').value = c.state || '';
+      document.getElementById('country').value = c.country || '';
       document.getElementById('employeeCount').value = c.employeeCount;
       document.getElementById('registeredDate').value = c.registeredDate;
       document.getElementById('username').value = c.username;
+      document.getElementById('password').value = c.password || 'securePass123';
+      
+      if (c.pincode && (!c.state || !c.country)) {
+        fetchPincodeDetails(c.pincode);
+      }
      
       // Set working hours if available
       if (c.workingHours) {
@@ -1249,8 +1451,14 @@
       const companyName = document.getElementById('companyName').value.trim();
       const companyCode = document.getElementById('companyCode').value.trim();
       const mobileNumber = document.getElementById('mobileNo').value.trim();
+      const telephoneNumber = document.getElementById('telephoneNo').value.trim();
       const emailAddress = document.getElementById('email').value.trim();
-      const address = document.getElementById('address').value.trim();
+      const mailingInchargeName = document.getElementById('mailingInchargeName').value.trim();
+      const mailingInchargeEmail = document.getElementById('mailingInchargeEmail').value.trim();
+      const addressLine = document.getElementById('addressLine').value.trim();
+      const pincode = document.getElementById('pincode').value.trim();
+      const state = document.getElementById('state').value.trim();
+      const country = document.getElementById('country').value.trim();
       const employeeCount = parseInt(document.getElementById('employeeCount').value, 10);
       const registeredDate = document.getElementById('registeredDate').value;
       const workingFrom = document.getElementById('workingFrom').value;
@@ -1259,7 +1467,7 @@
       const password = document.getElementById('password').value;
       const clientId = document.getElementById('saveClientBtn').dataset.id;
 
-      if (!clientName || !companyName || !mobileNumber || !emailAddress || !address || !employeeCount || !registeredDate || !username || !password) {
+      if (!clientName || !companyName || !mobileNumber || !telephoneNumber || !emailAddress || !mailingInchargeName || !mailingInchargeEmail || !addressLine || !pincode || !state || !country || !employeeCount || !registeredDate || !username || !password) {
         showToast('Please fill all required fields', true);
         return;
       }
@@ -1270,8 +1478,15 @@
         companyName,
         companyCode,
         mobileNumber,
+        telephoneNumber,
         emailAddress,
-        address,
+        mailingInchargeName,
+        mailingInchargeEmail,
+        addressLine,
+        address: addressLine,
+        pincode,
+        state,
+        country,
         employeeCount,
         registeredDate,
         workingHours,
@@ -1320,6 +1535,7 @@
       document.querySelector('#addClientModal .modal-title').textContent = 'Add New Client';
       document.getElementById('saveClientBtn').innerHTML = '<i class="fas fa-save me-2"></i>Save Client';
       delete document.getElementById('saveClientBtn').dataset.id;
+      lastPincodeLookup = '';
     });
   </script>
 </body>
